@@ -29,6 +29,7 @@
             {
                 <div class="form-group">
                     @Html.DisplayFor(model => model.BP.Category, new { htmlAttributes = new { @class = "form-control" } })
+                    <small class="form-text text-muted">@Model.BP.Advice</small>
                 </div>
             }
         </form>
