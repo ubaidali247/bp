@@ -52,4 +52,4 @@ jobs:
           app-name: 'bp-app-staging'
           slot-name: 'Production'
           package: .
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_1D5D3B0364F341689795E178DA40B63F }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_9DB31DFF220F4A68B53A16107CE92F7B }}
