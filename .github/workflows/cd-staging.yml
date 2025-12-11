@@ -6,7 +6,7 @@ name: Build and deploy ASP.Net Core app to Azure Web App - bp-app
 on:
   push:
     branches:
-      - staging
+      - Staging
   workflow_dispatch:
 
 jobs:
