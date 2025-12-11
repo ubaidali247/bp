@@ -2,8 +2,10 @@ using BPCalculator;
 using BPCalculator.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Moq;
 
 namespace BPCalculator.Tests;
@@ -79,38 +81,27 @@ public class StartupTests
     [Fact]
     public void Configure_Configures_Development_Pipeline()
     {
-        var services = new ServiceCollection();
-        services.AddLogging();
-        services.AddRazorPages();
-        var serviceProvider = services.BuildServiceProvider();
+        using var factory = new WebApplicationFactory<Startup>()
+            .WithWebHostBuilder(builder =>
+            {
+                builder.UseEnvironment("Development");
+            });
 
-        var startup = new Startup(_configuration);
-        var app = new ApplicationBuilder(serviceProvider);
-        var mockEnv = new Mock<IWebHostEnvironment>();
-        mockEnv.Setup(e => e.EnvironmentName).Returns("Development");
-
-        startup.Configure(app, mockEnv.Object);
-
-        Assert.NotNull(app);
+        using var client = factory.CreateClient();
+        Assert.NotNull(client);
     }
 
     [Fact]
     public void Configure_Configures_Production_Pipeline()
     {
-        var services = new ServiceCollection();
-        services.AddLogging();
-        services.AddRazorPages();
-        services.AddRouting();
-        var serviceProvider = services.BuildServiceProvider();
+        using var factory = new WebApplicationFactory<Startup>()
+            .WithWebHostBuilder(builder =>
+            {
+                builder.UseEnvironment("Production");
+            });
 
-        var startup = new Startup(_configuration);
-        var app = new ApplicationBuilder(serviceProvider);
-        var mockEnv = new Mock<IWebHostEnvironment>();
-        mockEnv.Setup(e => e.EnvironmentName).Returns("Production");
-
-        startup.Configure(app, mockEnv.Object);
-
-        Assert.NotNull(app);
+        using var client = factory.CreateClient();
+        Assert.NotNull(client);
     }
 
     [Fact]

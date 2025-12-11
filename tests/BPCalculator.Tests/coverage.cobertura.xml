@@ -1,0 +1,556 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<coverage line-rate="0.8726999999999999" branch-rate="0.54" version="1.9" timestamp="1765466910" lines-covered="96" lines-valid="110" branches-covered="27" branches-valid="50">
+  <sources>
+    <source>/Users/madnialihussain/Documents/Ubaid/bp/BPCalculator/</source>
+  </sources>
+  <packages>
+    <package name="BPCalculator" line-rate="0.8726999999999999" branch-rate="0.54" complexity="70">
+      <classes>
+        <class name="BPCalculator.BloodPressure" filename="BloodPressure.cs" line-rate="1" branch-rate="1" complexity="14">
+          <methods>
+            <method name="get_Systolic" signature="()" line-rate="1" branch-rate="1" complexity="1">
+              <lines>
+                <line number="24" hits="92" branch="False" />
+              </lines>
+            </method>
+            <method name="get_Diastolic" signature="()" line-rate="1" branch-rate="1" complexity="1">
+              <lines>
+                <line number="27" hits="80" branch="False" />
+              </lines>
+            </method>
+            <method name="get_Category" signature="()" line-rate="1" branch-rate="1" complexity="12">
+              <lines>
+                <line number="33" hits="20" branch="False" />
+                <line number="34" hits="20" branch="True" condition-coverage="100% (4/4)">
+                  <conditions>
+                    <condition number="12" type="jump" coverage="100%" />
+                    <condition number="32" type="jump" coverage="100%" />
+                  </conditions>
+                </line>
+                <line number="35" hits="6" branch="False" />
+                <line number="36" hits="6" branch="False" />
+                <line number="39" hits="14" branch="True" condition-coverage="100% (4/4)">
+                  <conditions>
+                    <condition number="47" type="jump" coverage="100%" />
+                    <condition number="67" type="jump" coverage="100%" />
+                  </conditions>
+                </line>
+                <line number="40" hits="7" branch="False" />
+                <line number="41" hits="7" branch="False" />
+                <line number="44" hits="7" branch="True" condition-coverage="100% (4/4)">
+                  <conditions>
+                    <condition number="82" type="jump" coverage="100%" />
+                    <condition number="102" type="jump" coverage="100%" />
+                  </conditions>
+                </line>
+                <line number="45" hits="4" branch="False" />
+                <line number="46" hits="4" branch="False" />
+                <line number="49" hits="3" branch="False" />
+                <line number="50" hits="20" branch="False" />
+              </lines>
+            </method>
+          </methods>
+          <lines>
+            <line number="24" hits="92" branch="False" />
+            <line number="27" hits="80" branch="False" />
+            <line number="33" hits="20" branch="False" />
+            <line number="34" hits="20" branch="True" condition-coverage="100% (4/4)">
+              <conditions>
+                <condition number="12" type="jump" coverage="100%" />
+                <condition number="32" type="jump" coverage="100%" />
+              </conditions>
+            </line>
+            <line number="35" hits="6" branch="False" />
+            <line number="36" hits="6" branch="False" />
+            <line number="39" hits="14" branch="True" condition-coverage="100% (4/4)">
+              <conditions>
+                <condition number="47" type="jump" coverage="100%" />
+                <condition number="67" type="jump" coverage="100%" />
+              </conditions>
+            </line>
+            <line number="40" hits="7" branch="False" />
+            <line number="41" hits="7" branch="False" />
+            <line number="44" hits="7" branch="True" condition-coverage="100% (4/4)">
+              <conditions>
+                <condition number="82" type="jump" coverage="100%" />
+                <condition number="102" type="jump" coverage="100%" />
+              </conditions>
+            </line>
+            <line number="45" hits="4" branch="False" />
+            <line number="46" hits="4" branch="False" />
+            <line number="49" hits="3" branch="False" />
+            <line number="50" hits="20" branch="False" />
+          </lines>
+        </class>
+        <class name="BPCalculator.Program" filename="Program.cs" line-rate="0.625" branch-rate="1" complexity="2">
+          <methods>
+            <method name="Main" signature="(System.String[])" line-rate="0" branch-rate="1" complexity="1">
+              <lines>
+                <line number="15" hits="0" branch="False" />
+                <line number="16" hits="0" branch="False" />
+                <line number="17" hits="0" branch="False" />
+              </lines>
+            </method>
+            <method name="CreateHostBuilder" signature="(System.String[])" line-rate="1" branch-rate="1" complexity="1">
+              <lines>
+                <line number="20" hits="2" branch="False" />
+                <line number="21" hits="2" branch="False" />
+                <line number="22" hits="2" branch="False" />
+                <line number="23" hits="2" branch="False" />
+                <line number="24" hits="4" branch="False" />
+              </lines>
+            </method>
+          </methods>
+          <lines>
+            <line number="15" hits="0" branch="False" />
+            <line number="16" hits="0" branch="False" />
+            <line number="17" hits="0" branch="False" />
+            <line number="20" hits="2" branch="False" />
+            <line number="21" hits="2" branch="False" />
+            <line number="22" hits="2" branch="False" />
+            <line number="23" hits="2" branch="False" />
+            <line number="24" hits="4" branch="False" />
+          </lines>
+        </class>
+        <class name="BPCalculator.Startup" filename="Startup.cs" line-rate="1" branch-rate="1" complexity="5">
+          <methods>
+            <method name="get_Configuration" signature="()" line-rate="1" branch-rate="1" complexity="1">
+              <lines>
+                <line number="21" hits="3" branch="False" />
+              </lines>
+            </method>
+            <method name="ConfigureServices" signature="(Microsoft.Extensions.DependencyInjection.IServiceCollection)" line-rate="1" branch-rate="1" complexity="1">
+              <lines>
+                <line number="25" hits="5" branch="False" />
+                <line number="26" hits="5" branch="False" />
+                <line number="27" hits="5" branch="False" />
+                <line number="28" hits="5" branch="False" />
+              </lines>
+            </method>
+            <method name="Configure" signature="(Microsoft.AspNetCore.Builder.IApplicationBuilder,Microsoft.AspNetCore.Hosting.IWebHostEnvironment)" line-rate="1" branch-rate="1" complexity="2">
+              <lines>
+                <line number="32" hits="2" branch="False" />
+                <line number="33" hits="2" branch="True" condition-coverage="100% (2/2)">
+                  <conditions>
+                    <condition number="9" type="jump" coverage="100%" />
+                  </conditions>
+                </line>
+                <line number="34" hits="1" branch="False" />
+                <line number="35" hits="1" branch="False" />
+                <line number="36" hits="1" branch="False" />
+                <line number="38" hits="1" branch="False" />
+                <line number="39" hits="1" branch="False" />
+                <line number="40" hits="1" branch="False" />
+                <line number="42" hits="2" branch="False" />
+                <line number="44" hits="2" branch="False" />
+                <line number="46" hits="2" branch="False" />
+                <line number="48" hits="2" branch="False" />
+                <line number="49" hits="2" branch="False" />
+                <line number="50" hits="2" branch="False" />
+                <line number="51" hits="4" branch="False" />
+                <line number="52" hits="2" branch="False" />
+              </lines>
+            </method>
+            <method name=".ctor" signature="(Microsoft.Extensions.Configuration.IConfiguration)" line-rate="1" branch-rate="1" complexity="1">
+              <lines>
+                <line number="16" hits="7" branch="False" />
+                <line number="17" hits="7" branch="False" />
+                <line number="18" hits="7" branch="False" />
+                <line number="19" hits="7" branch="False" />
+              </lines>
+            </method>
+          </methods>
+          <lines>
+            <line number="21" hits="3" branch="False" />
+            <line number="25" hits="5" branch="False" />
+            <line number="26" hits="5" branch="False" />
+            <line number="27" hits="5" branch="False" />
+            <line number="28" hits="5" branch="False" />
+            <line number="32" hits="2" branch="False" />
+            <line number="33" hits="2" branch="True" condition-coverage="100% (2/2)">
+              <conditions>
+                <condition number="9" type="jump" coverage="100%" />
+              </conditions>
+            </line>
+            <line number="34" hits="1" branch="False" />
+            <line number="35" hits="1" branch="False" />
+            <line number="36" hits="1" branch="False" />
+            <line number="38" hits="1" branch="False" />
+            <line number="39" hits="1" branch="False" />
+            <line number="40" hits="1" branch="False" />
+            <line number="42" hits="2" branch="False" />
+            <line number="44" hits="2" branch="False" />
+            <line number="46" hits="2" branch="False" />
+            <line number="48" hits="2" branch="False" />
+            <line number="49" hits="2" branch="False" />
+            <line number="50" hits="2" branch="False" />
+            <line number="51" hits="4" branch="False" />
+            <line number="52" hits="2" branch="False" />
+            <line number="16" hits="7" branch="False" />
+            <line number="17" hits="7" branch="False" />
+            <line number="18" hits="7" branch="False" />
+            <line number="19" hits="7" branch="False" />
+          </lines>
+        </class>
+        <class name="BPCalculator.Services.TelemetryService" filename="Services/TelemetryService.cs" line-rate="1" branch-rate="0.625" complexity="10">
+          <methods>
+            <method name="TrackCalculation" signature="(BPCalculator.BloodPressure)" line-rate="1" branch-rate="0.625" complexity="8">
+              <lines>
+                <line number="22" hits="2" branch="False" />
+                <line number="23" hits="2" branch="True" condition-coverage="100% (2/2)">
+                  <conditions>
+                    <condition number="7" type="jump" coverage="100%" />
+                  </conditions>
+                </line>
+                <line number="24" hits="1" branch="False" />
+                <line number="25" hits="1" branch="False" />
+                <line number="28" hits="1" branch="False" />
+                <line number="30" hits="1" branch="False" />
+                <line number="31" hits="1" branch="True" condition-coverage="50% (1/2)">
+                  <conditions>
+                    <condition number="40" type="jump" coverage="50%" />
+                  </conditions>
+                </line>
+                <line number="32" hits="1" branch="True" condition-coverage="50% (1/2)">
+                  <conditions>
+                    <condition number="68" type="jump" coverage="50%" />
+                  </conditions>
+                </line>
+                <line number="33" hits="1" branch="True" condition-coverage="50% (1/2)">
+                  <conditions>
+                    <condition number="96" type="jump" coverage="50%" />
+                  </conditions>
+                </line>
+                <line number="35" hits="1" branch="False" />
+                <line number="36" hits="3" branch="False" />
+              </lines>
+            </method>
+            <method name=".ctor" signature="(Microsoft.Extensions.Logging.ILogger`1&lt;BPCalculator.Services.TelemetryService&gt;)" line-rate="1" branch-rate="1" complexity="1">
+              <lines>
+                <line number="16" hits="3" branch="False" />
+                <line number="17" hits="3" branch="False" />
+                <line number="18" hits="3" branch="False" />
+                <line number="19" hits="3" branch="False" />
+              </lines>
+            </method>
+            <method name=".cctor" signature="()" line-rate="1" branch-rate="1" complexity="1">
+              <lines>
+                <line number="13" hits="1" branch="False" />
+              </lines>
+            </method>
+          </methods>
+          <lines>
+            <line number="22" hits="2" branch="False" />
+            <line number="23" hits="2" branch="True" condition-coverage="100% (2/2)">
+              <conditions>
+                <condition number="7" type="jump" coverage="100%" />
+              </conditions>
+            </line>
+            <line number="24" hits="1" branch="False" />
+            <line number="25" hits="1" branch="False" />
+            <line number="28" hits="1" branch="False" />
+            <line number="30" hits="1" branch="False" />
+            <line number="31" hits="1" branch="True" condition-coverage="50% (1/2)">
+              <conditions>
+                <condition number="40" type="jump" coverage="50%" />
+              </conditions>
+            </line>
+            <line number="32" hits="1" branch="True" condition-coverage="50% (1/2)">
+              <conditions>
+                <condition number="68" type="jump" coverage="50%" />
+              </conditions>
+            </line>
+            <line number="33" hits="1" branch="True" condition-coverage="50% (1/2)">
+              <conditions>
+                <condition number="96" type="jump" coverage="50%" />
+              </conditions>
+            </line>
+            <line number="35" hits="1" branch="False" />
+            <line number="36" hits="3" branch="False" />
+            <line number="16" hits="3" branch="False" />
+            <line number="17" hits="3" branch="False" />
+            <line number="18" hits="3" branch="False" />
+            <line number="19" hits="3" branch="False" />
+            <line number="13" hits="1" branch="False" />
+          </lines>
+        </class>
+        <class name="BPCalculator.Pages.ErrorModel" filename="Pages/Error.cshtml.cs" line-rate="1" branch-rate="1" complexity="7">
+          <methods>
+            <method name="get_RequestId" signature="()" line-rate="1" branch-rate="1" complexity="1">
+              <lines>
+                <line number="15" hits="16" branch="False" />
+              </lines>
+            </method>
+            <method name="get_ShowRequestId" signature="()" line-rate="1" branch-rate="1" complexity="1">
+              <lines>
+                <line number="17" hits="3" branch="False" />
+              </lines>
+            </method>
+            <method name="OnGet" signature="()" line-rate="1" branch-rate="1" complexity="4">
+              <lines>
+                <line number="27" hits="3" branch="False" />
+                <line number="28" hits="3" branch="True" condition-coverage="100% (4/4)">
+                  <conditions>
+                    <condition number="8" type="jump" coverage="100%" />
+                    <condition number="20" type="jump" coverage="100%" />
+                  </conditions>
+                </line>
+                <line number="29" hits="3" branch="False" />
+                <line number="30" hits="3" branch="False" />
+              </lines>
+            </method>
+            <method name=".ctor" signature="(Microsoft.Extensions.Logging.ILogger`1&lt;BPCalculator.Pages.ErrorModel&gt;)" line-rate="1" branch-rate="1" complexity="1">
+              <lines>
+                <line number="21" hits="6" branch="False" />
+                <line number="22" hits="6" branch="False" />
+                <line number="23" hits="6" branch="False" />
+                <line number="24" hits="6" branch="False" />
+              </lines>
+            </method>
+          </methods>
+          <lines>
+            <line number="15" hits="16" branch="False" />
+            <line number="17" hits="3" branch="False" />
+            <line number="27" hits="3" branch="False" />
+            <line number="28" hits="3" branch="True" condition-coverage="100% (4/4)">
+              <conditions>
+                <condition number="8" type="jump" coverage="100%" />
+                <condition number="20" type="jump" coverage="100%" />
+              </conditions>
+            </line>
+            <line number="29" hits="3" branch="False" />
+            <line number="30" hits="3" branch="False" />
+            <line number="21" hits="6" branch="False" />
+            <line number="22" hits="6" branch="False" />
+            <line number="23" hits="6" branch="False" />
+            <line number="24" hits="6" branch="False" />
+          </lines>
+        </class>
+        <class name="BPCalculator.Pages.BloodPressureModel" filename="Pages/Index.cshtml.cs" line-rate="1" branch-rate="1" complexity="7">
+          <methods>
+            <method name="get_BP" signature="()" line-rate="1" branch-rate="1" complexity="1">
+              <lines>
+                <line number="19" hits="37" branch="False" />
+              </lines>
+            </method>
+            <method name="OnGet" signature="()" line-rate="1" branch-rate="1" complexity="1">
+              <lines>
+                <line number="23" hits="1" branch="False" />
+                <line number="24" hits="1" branch="False" />
+                <line number="25" hits="1" branch="False" />
+              </lines>
+            </method>
+            <method name="OnPost" signature="()" line-rate="1" branch-rate="1" complexity="4">
+              <lines>
+                <line number="29" hits="9" branch="False" />
+                <line number="31" hits="9" branch="True" condition-coverage="100% (2/2)">
+                  <conditions>
+                    <condition number="30" type="jump" coverage="100%" />
+                  </conditions>
+                </line>
+                <line number="32" hits="2" branch="False" />
+                <line number="33" hits="2" branch="False" />
+                <line number="34" hits="2" branch="False" />
+                <line number="36" hits="9" branch="True" condition-coverage="100% (2/2)">
+                  <conditions>
+                    <condition number="69" type="jump" coverage="100%" />
+                  </conditions>
+                </line>
+                <line number="37" hits="6" branch="False" />
+                <line number="38" hits="6" branch="False" />
+                <line number="39" hits="6" branch="False" />
+                <line number="40" hits="9" branch="False" />
+                <line number="41" hits="9" branch="False" />
+              </lines>
+            </method>
+            <method name=".ctor" signature="(BPCalculator.Services.ITelemetryService)" line-rate="1" branch-rate="1" complexity="1">
+              <lines>
+                <line number="13" hits="10" branch="False" />
+                <line number="14" hits="10" branch="False" />
+                <line number="15" hits="10" branch="False" />
+                <line number="16" hits="10" branch="False" />
+              </lines>
+            </method>
+          </methods>
+          <lines>
+            <line number="19" hits="37" branch="False" />
+            <line number="23" hits="1" branch="False" />
+            <line number="24" hits="1" branch="False" />
+            <line number="25" hits="1" branch="False" />
+            <line number="29" hits="9" branch="False" />
+            <line number="31" hits="9" branch="True" condition-coverage="100% (2/2)">
+              <conditions>
+                <condition number="30" type="jump" coverage="100%" />
+              </conditions>
+            </line>
+            <line number="32" hits="2" branch="False" />
+            <line number="33" hits="2" branch="False" />
+            <line number="34" hits="2" branch="False" />
+            <line number="36" hits="9" branch="True" condition-coverage="100% (2/2)">
+              <conditions>
+                <condition number="69" type="jump" coverage="100%" />
+              </conditions>
+            </line>
+            <line number="37" hits="6" branch="False" />
+            <line number="38" hits="6" branch="False" />
+            <line number="39" hits="6" branch="False" />
+            <line number="40" hits="9" branch="False" />
+            <line number="41" hits="9" branch="False" />
+            <line number="13" hits="10" branch="False" />
+            <line number="14" hits="10" branch="False" />
+            <line number="15" hits="10" branch="False" />
+            <line number="16" hits="10" branch="False" />
+          </lines>
+        </class>
+        <class name="BPCalculator.Pages.PrivacyModel" filename="Pages/Privacy.cshtml.cs" line-rate="1" branch-rate="1" complexity="2">
+          <methods>
+            <method name="OnGet" signature="()" line-rate="1" branch-rate="1" complexity="1">
+              <lines>
+                <line number="21" hits="2" branch="False" />
+                <line number="22" hits="2" branch="False" />
+                <line number="23" hits="2" branch="False" />
+              </lines>
+            </method>
+            <method name=".ctor" signature="(Microsoft.Extensions.Logging.ILogger`1&lt;BPCalculator.Pages.PrivacyModel&gt;)" line-rate="1" branch-rate="1" complexity="1">
+              <lines>
+                <line number="15" hits="4" branch="False" />
+                <line number="16" hits="4" branch="False" />
+                <line number="17" hits="4" branch="False" />
+                <line number="18" hits="4" branch="False" />
+              </lines>
+            </method>
+          </methods>
+          <lines>
+            <line number="21" hits="2" branch="False" />
+            <line number="22" hits="2" branch="False" />
+            <line number="23" hits="2" branch="False" />
+            <line number="15" hits="4" branch="False" />
+            <line number="16" hits="4" branch="False" />
+            <line number="17" hits="4" branch="False" />
+            <line number="18" hits="4" branch="False" />
+          </lines>
+        </class>
+        <class name="BPCalculator.Pages.Pages_Error/&lt;ExecuteAsync&gt;d__0" filename="Pages/Error.cshtml" line-rate="0" branch-rate="0" complexity="2">
+          <methods>
+            <method name="MoveNext" signature="()" line-rate="0" branch-rate="0" complexity="2">
+              <lines>
+                <line number="4" hits="0" branch="False" />
+                <line number="10" hits="0" branch="True" condition-coverage="0% (0/2)">
+                  <conditions>
+                    <condition number="70" type="jump" coverage="0%" />
+                  </conditions>
+                </line>
+                <line number="11" hits="0" branch="False" />
+                <line number="15" hits="0" branch="False" />
+              </lines>
+            </method>
+          </methods>
+          <lines>
+            <line number="4" hits="0" branch="False" />
+            <line number="10" hits="0" branch="True" condition-coverage="0% (0/2)">
+              <conditions>
+                <condition number="70" type="jump" coverage="0%" />
+              </conditions>
+            </line>
+            <line number="11" hits="0" branch="False" />
+            <line number="15" hits="0" branch="False" />
+          </lines>
+        </class>
+        <class name="BPCalculator.Pages.Pages_Index/&lt;&lt;ExecuteAsync&gt;b__17_0&gt;d" filename="Pages/Index.cshtml" line-rate="0" branch-rate="0" complexity="16">
+          <methods>
+            <method name="MoveNext" signature="()" line-rate="0" branch-rate="0" complexity="16">
+              <lines>
+                <line number="28" hits="0" branch="True" condition-coverage="0% (0/16)">
+                  <conditions>
+                    <condition number="505" type="jump" coverage="0%" />
+                    <condition number="1142" type="jump" coverage="0%" />
+                    <condition number="1779" type="jump" coverage="0%" />
+                    <condition number="2416" type="jump" coverage="0%" />
+                    <condition number="3053" type="jump" coverage="0%" />
+                    <condition number="3692" type="jump" coverage="0%" />
+                    <condition number="4331" type="jump" coverage="0%" />
+                    <condition number="4542" type="jump" coverage="0%" />
+                  </conditions>
+                </line>
+                <line number="29" hits="0" branch="False" />
+                <line number="33" hits="0" branch="False" />
+              </lines>
+            </method>
+          </methods>
+          <lines>
+            <line number="28" hits="0" branch="True" condition-coverage="0% (0/16)">
+              <conditions>
+                <condition number="505" type="jump" coverage="0%" />
+                <condition number="1142" type="jump" coverage="0%" />
+                <condition number="1779" type="jump" coverage="0%" />
+                <condition number="2416" type="jump" coverage="0%" />
+                <condition number="3053" type="jump" coverage="0%" />
+                <condition number="3692" type="jump" coverage="0%" />
+                <condition number="4331" type="jump" coverage="0%" />
+                <condition number="4542" type="jump" coverage="0%" />
+              </conditions>
+            </line>
+            <line number="29" hits="0" branch="False" />
+            <line number="33" hits="0" branch="False" />
+          </lines>
+        </class>
+        <class name="BPCalculator.Pages.Pages_Index/&lt;&lt;ExecuteAsync&gt;b__17_1&gt;d" filename="Pages/Index.cshtml" line-rate="0" branch-rate="1" complexity="1">
+          <methods>
+            <method name="MoveNext" signature="()" line-rate="0" branch-rate="1" complexity="1">
+              <lines>
+                <line number="39" hits="0" branch="False" />
+              </lines>
+            </method>
+          </methods>
+          <lines>
+            <line number="39" hits="0" branch="False" />
+          </lines>
+        </class>
+        <class name="BPCalculator.Pages.Pages_Index/&lt;ExecuteAsync&gt;d__17" filename="Pages/Index.cshtml" line-rate="0" branch-rate="0" complexity="2">
+          <methods>
+            <method name="MoveNext" signature="()" line-rate="0" branch-rate="0" complexity="2">
+              <lines>
+                <line number="5" hits="0" branch="True" condition-coverage="0% (0/2)">
+                  <conditions>
+                    <condition number="464" type="jump" coverage="0%" />
+                  </conditions>
+                </line>
+              </lines>
+            </method>
+          </methods>
+          <lines>
+            <line number="5" hits="0" branch="True" condition-coverage="0% (0/2)">
+              <conditions>
+                <condition number="464" type="jump" coverage="0%" />
+              </conditions>
+            </line>
+          </lines>
+        </class>
+        <class name="BPCalculator.Pages.Pages_Privacy/&lt;ExecuteAsync&gt;d__0" filename="Pages/Privacy.cshtml" line-rate="0" branch-rate="1" complexity="1">
+          <methods>
+            <method name="MoveNext" signature="()" line-rate="0" branch-rate="1" complexity="1">
+              <lines>
+                <line number="4" hits="0" branch="False" />
+              </lines>
+            </method>
+          </methods>
+          <lines>
+            <line number="4" hits="0" branch="False" />
+          </lines>
+        </class>
+        <class name="BPCalculator.Pages.Pages__ViewStart/&lt;ExecuteAsync&gt;d__0" filename="Pages/_ViewStart.cshtml" line-rate="0" branch-rate="1" complexity="1">
+          <methods>
+            <method name="MoveNext" signature="()" line-rate="0" branch-rate="1" complexity="1">
+              <lines>
+                <line number="2" hits="0" branch="False" />
+              </lines>
+            </method>
+          </methods>
+          <lines>
+            <line number="2" hits="0" branch="False" />
+          </lines>
+        </class>
+      </classes>
+    </package>
+  </packages>
+</coverage>
