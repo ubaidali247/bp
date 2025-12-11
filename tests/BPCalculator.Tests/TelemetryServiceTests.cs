@@ -15,7 +15,8 @@ public class TelemetryServiceTests
     {
         var telemetry = new TelemetryService(CreateLogger());
 
-        telemetry.TrackCalculation(null);
+        var exception = Record.Exception(() => telemetry.TrackCalculation(null));
+        Assert.Null(exception);
     }
 
     [Fact]
@@ -24,7 +25,8 @@ public class TelemetryServiceTests
         var telemetry = new TelemetryService(CreateLogger());
         var reading = new BloodPressure { Systolic = 120, Diastolic = 80 };
 
-        telemetry.TrackCalculation(reading);
+        var exception = Record.Exception(() => telemetry.TrackCalculation(reading));
+        Assert.Null(exception);
     }
 }
 

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -19,6 +19,7 @@ namespace BPCalculator.Pages
 
         public void OnGet()
         {
+            _logger.LogInformation("Privacy page accessed");
         }
     }
 }

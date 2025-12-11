@@ -26,6 +26,7 @@ namespace BPCalculator.Pages
         public void OnGet()
         {
             RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier;
+            _logger.LogError("Error page accessed with RequestId: {RequestId}", RequestId);
         }
     }
 }
