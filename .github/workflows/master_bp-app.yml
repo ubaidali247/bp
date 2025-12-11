@@ -62,4 +62,29 @@ jobs:
           app-name: 'bp-app'
           slot-name: 'Production'
           package: .
-          
+
+           smoke-test:
+  runs-on: windows-latest
+  needs: deploy  # ensures it runs after deployment
+  steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '9.x'
+
+    - name: Run dotnet tests
+      run: dotnet test --configuration Release
+
+    - name: Simple HTTP check
+      shell: powershell
+      run: |
+        $url = "https://bp-app-staging-hqhsbkf3ezhkhmh8.francecentral-01.azurewebsites.net/"
+        $response = Invoke-WebRequest -Uri $url -UseBasicParsing
+        if ($response.StatusCode -ne 200) {
+          Write-Error "Smoke test failed! HTTP Status: $($response.StatusCode)"
+        } else {
+          Write-Host "Smoke test passed! HTTP Status: $($response.StatusCode)"
+        }
