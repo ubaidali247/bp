@@ -2,9 +2,9 @@ name: CI - Build, Test, SonarCloud
 
 on:
   push:
-    branches: [ master, develop ]
+    branches: [ main, develop ]
   pull_request:
-    branches: [ master, develop ]
+    branches: [ main, develop ]
 
 jobs:
   build-and-analyze:
@@ -14,7 +14,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          fetch-depth: 0   # Required for SonarCloud
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
@@ -44,16 +44,9 @@ jobs:
         run: dotnet build --configuration Release --no-restore
 
       - name: Test and Generate Coverage
-  run: |
-    dotnet test tests/BPCalculator.Tests/BPCalculator.Tests.csproj \
-      --verbosity normal \
-      /p:CollectCoverage=true \
-      /p:CoverletOutput=./coverage.opencover.xml \
-      /p:CoverletOutputFormat=opencover
-
+        run: dotnet test tests/BPCalculator.Tests/BPCalculator.Tests.csproj --verbosity normal /p:CollectCoverage=true /p:CoverletOutput=coverage.opencover.xml /p:CoverletOutputFormat=opencover
 
       - name: SonarCloud - End Analysis
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: |
-          dotnet sonarscanner end /d:sonar.login="${SONAR_TOKEN}"
+        run: dotnet sonarscanner end /d:sonar.login="${SONAR_TOKEN}"
