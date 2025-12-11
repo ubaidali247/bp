@@ -1,13 +1,20 @@
-name: CI - Build, Test, SonarCloud
+name: CI-CD Pipeline (Build, Test, SonarCloud, Deploy Staging/Prod)
 
 on:
   push:
-    branches: [ feature/sonarcloud-integration, master ]
+    branches: 
+      - "**"
   pull_request:
-    branches: [ feature/sonarcloud-integration, master ]
+    branches:
+      - master
+      - staging
 
 jobs:
-  build-and-analyze:
+
+  # -------------------------------------------------------
+  # 1. CI JOB → build, test, sonarcloud (runs on every branch)
+  # -------------------------------------------------------
+  ci:
     runs-on: ubuntu-latest
 
     steps:
@@ -19,7 +26,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: "8.0.x"
+          dotnet-version: "9.0.x"
 
       - name: Restore dependencies
         run: dotnet restore
@@ -30,6 +37,7 @@ jobs:
           echo "$HOME/.dotnet/tools" >> $GITHUB_PATH
 
       - name: SonarCloud - Begin Analysis
+        if: ${{ env.SONAR_TOKEN != '' }}
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
@@ -40,16 +48,102 @@ jobs:
             /d:sonar.host.url="https://sonarcloud.io" \
             /d:sonar.cs.opencover.reportsPaths="**/coverage.opencover.xml"
 
-      - name: Clean
-        run: dotnet clean
-
       - name: Build
         run: dotnet build --configuration Release --no-restore
 
       - name: Test and Generate Coverage
-        run: dotnet test tests/BPCalculator.Tests/BPCalculator.Tests.csproj --verbosity normal /p:CollectCoverage=true /p:CoverletOutput=coverage.opencover.xml /p:CoverletOutputFormat=opencover
+        run: dotnet test --verbosity normal /p:CollectCoverage=true /p:CoverletOutput=coverage.opencover.xml /p:CoverletOutputFormat=opencover
 
       - name: SonarCloud - End Analysis
+        if: ${{ env.SONAR_TOKEN != '' }}
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: dotnet sonarscanner end /d:sonar.login="${SONAR_TOKEN}"
+
+
+  # -------------------------------------------------------
+  # 2. DEPLOY TO STAGING → only on staging branch
+  # -------------------------------------------------------
+  deploy_staging:
+    runs-on: windows-latest
+    needs: ci
+    if: github.ref == 'refs/heads/staging'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.x'
+
+      - name: Publish App
+        run: dotnet publish -c Release -o "published"
+
+      - name: Deploy to Azure Staging
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: "bp-app-staging"
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_9DB31DFF220F4A68B53A16107CE92F7B }}
+          package: "published"
+
+
+  # -------------------------------------------------------
+  # 3. SMOKE TESTS (Only after staging deploy)
+  # -------------------------------------------------------
+  smoke_test:
+    runs-on: windows-latest
+    needs: deploy_staging
+    if: github.ref == 'refs/heads/staging'
+
+    steps:
+      - name: Simple HTTP check
+        shell: pwsh
+        run: |
+          $url = "https://bp-app-staging-hqhsbkf3ezhkhmh8.francecentral-01.azurewebsites.net/"
+          $response = Invoke-WebRequest -Uri $url -UseBasicParsing
+          if ($response.StatusCode -ne 200) {
+              Write-Error "Smoke test failed! HTTP Status: $($response.StatusCode)"
+          } else {
+              Write-Host "Smoke test passed! HTTP Status: $($response.StatusCode)"
+          }
+
+
+  # -------------------------------------------------------
+  # 4. DEPLOY TO PRODUCTION → only on master branch
+  # -------------------------------------------------------
+  deploy_prod:
+    runs-on: windows-latest
+    needs: ci
+    if: github.ref == 'refs/heads/master'
+
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.x'
+
+      - name: Publish App
+        run: dotnet publish -c Release -o "published"
+
+      - name: Azure Login (OIDC)
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_6599CACD2F1F4439935635D7D9794176 }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_196F7C91A67E43AC9556CC646674D709 }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_70341DED43AB45308F84726349690B1E }}
+
+      - name: Deploy to Azure Production
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: "bp-app"
+          slot-name: "Production"
+          package: "published"
