@@ -49,5 +49,14 @@ namespace BPCalculator
                 return BPCategory.Low;
             }
         }
+
+        public string Advice => Category switch
+        {
+            BPCategory.High => "High BP: seek medical review soon.",
+            BPCategory.PreHigh => "Pre-high: adjust diet/exercise and recheck.",
+            BPCategory.Ideal => "Ideal: keep current habits.",
+            BPCategory.Low => "Low: hydrate and rest if dizzy.",
+            _ => string.Empty
+        };
     }
 }
