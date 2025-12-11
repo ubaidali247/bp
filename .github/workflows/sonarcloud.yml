@@ -46,7 +46,7 @@ jobs:
       - name: Build
         run: dotnet build --configuration Release --no-restore
 
-      - name: Test and Generate Coverage
+      - name: Test and Generate Coveragee
         run: dotnet test tests/BPCalculator.Tests/BPCalculator.Tests.csproj \
           --verbosity normal \
           /p:CollectCoverage=true \
