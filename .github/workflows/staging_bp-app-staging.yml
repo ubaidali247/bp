@@ -1,12 +1,12 @@
 # Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 
-name: Build and deploy ASP.Net Core app to Azure Web App - bp-app
+name: Build and deploy ASP.Net Core app to Azure Web App - bp-app-staging
 
 on:
   push:
     branches:
-      - master
+      - Staging
   workflow_dispatch:
 
 jobs:
@@ -38,27 +38,45 @@ jobs:
   deploy:
     runs-on: windows-latest
     needs: build
-    permissions:
-      id-token: write #This is required for requesting the JWT
-      contents: read #This is required for actions/checkout
-
+    
     steps:
       - name: Download artifact from build job
         uses: actions/download-artifact@v4
         with:
           name: .net-app
       
-      - name: Login to Azure
-        uses: azure/login@v2
-        with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_6599CACD2F1F4439935635D7D9794176 }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_196F7C91A67E43AC9556CC646674D709 }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_70341DED43AB45308F84726349690B1E }}
-
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
         with:
-          app-name: 'bp-app'
+          app-name: 'bp-app-staging'
           slot-name: 'Production'
           package: .
+
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_9DB31DFF220F4A68B53A16107CE92F7B }}
+
+  smoke-test:
+    runs-on: windows-latest
+    needs: deploy
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.x'
+
+      - name: Run dotnet tests
+        run: dotnet test --configuration Release
+
+      - name: Simple HTTP check
+        shell: pwsh
+        run: |
+          $url = "https://bp-app-staging-hqhsbkf3ezhkhmh8.francecentral-01.azurewebsites.net/"
+          $response = Invoke-WebRequest -Uri $url -UseBasicParsing
+          if ($response.StatusCode -ne 200) {
+              Write-Error "Smoke test failed! HTTP Status: $($response.StatusCode)"
+          } else {
+              Write-Host "Smoke test passed! HTTP Status: $($response.StatusCode)"
+          }
