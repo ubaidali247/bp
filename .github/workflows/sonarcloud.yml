@@ -46,12 +46,13 @@ jobs:
       - name: Build
         run: dotnet build --configuration Release --no-restore
 
-      - name: Test and Generate Coveragee
-        run: dotnet test tests/BPCalculator.Tests/BPCalculator.Tests.csproj \
-          --verbosity normal \
-          /p:CollectCoverage=true \
-          /p:CoverletOutput=coverage.opencover.xml \
-          /p:CoverletOutputFormat=opencover
+      - name: Test and Generate Coverage
+        run: |
+          dotnet test tests/BPCalculator.Tests/BPCalculator.Tests.csproj \
+            --verbosity normal \
+            /p:CollectCoverage=true \
+            /p:CoverletOutput=coverage.opencover.xml \
+            /p:CoverletOutputFormat=opencover
 
       - name: SonarCloud - End Analysis
         env:
