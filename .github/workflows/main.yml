@@ -215,7 +215,7 @@ jobs:
         shell: pwsh
         run: |
           Start-Sleep -Seconds 15
-          $url = "https://bp-app.azurewebsites.net/"
+          $url = "https://bp-app-cnega2e8cfcneud5.francecentral-01.azurewebsites.net/"
           Write-Host "Verifying production: $url"
           
           $response = Invoke-WebRequest -Uri $url -UseBasicParsing
