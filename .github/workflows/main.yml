@@ -149,7 +149,7 @@ jobs:
         uses: azure/webapps-deploy@v3
         with:
           app-name: "bp-app"
-          slot-name: "bp-app-green"
+          slot-name: "green"
           package: "published"
 
 
@@ -208,7 +208,7 @@ jobs:
           az webapp deployment slot swap `
             --name bp-app `
             --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} `
-            --slot bp-app-green `
+            --slot green `
             --target-slot production
 
       - name: Verify Production
