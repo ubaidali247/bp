@@ -12,7 +12,7 @@ on:
 jobs:
 
   # -------------------------------------------------------
-  # 1. CI JOB → Build, Test, Playwright, SonarCloud
+  # 1. CI JOB → build, test, sonarcloud (runs on every branch)
   # -------------------------------------------------------
   ci:
     runs-on: ubuntu-latest
@@ -48,29 +48,13 @@ jobs:
             /d:sonar.host.url="https://sonarcloud.io" \
             /d:sonar.cs.opencover.reportsPaths="**/coverage.opencover.xml"
 
-      - name: Build App
+      - name: Build
         run: dotnet build --configuration Release --no-restore
 
-      # -------------------------------------------------
-      # ⭐ Install Playwright Browsers
-      # -------------------------------------------------
-      - name: Install Playwright
-        run: |
-          dotnet tool install --global Microsoft.Playwright.CLI || true
-          playwright install
+      - name: Install Playwright Browsers
+        run: pwsh tests/BPCalculator.E2E/bin/Release/net8.0/playwright.ps1 install --with-deps chromium
+        continue-on-error: false
 
-      # -------------------------------------------------
-      # ⭐ Start the web app for Playwright E2E tests
-      # -------------------------------------------------
-      - name: Start Web App (Background)
-        run: |
-          dotnet run --project BPCalculator/BPCalculator.csproj --urls "http://localhost:5000" &
-          echo "Waiting for app to start..."
-          sleep 10
-
-      # -------------------------------------------------
-      # ⭐ Run ALL tests (Unit + Playwright E2E)
-      # -------------------------------------------------
       - name: Test and Generate Coverage
         run: dotnet test --verbosity normal /p:CollectCoverage=true /p:CoverletOutput=coverage.opencover.xml /p:CoverletOutputFormat=opencover
 
@@ -110,7 +94,7 @@ jobs:
 
 
   # -------------------------------------------------------
-  # 3. SMOKE TESTS AFTER STAGING DEPLOY
+  # 3. SMOKE TESTS (Only after staging deploy)
   # -------------------------------------------------------
   smoke_test:
     runs-on: windows-latest
