@@ -207,7 +207,7 @@ jobs:
           Write-Host "Swapping green slot to production..."
           az webapp deployment slot swap `
             --name bp-app `
-            --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} `
+            --resource-group bp-app_group `
             --slot green `
             --target-slot production
 
