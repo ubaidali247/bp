@@ -3,7 +3,9 @@ using System.Diagnostics;
 namespace BPCalculator.E2E;
 
 /// <summary>
-
+/// Fixture that automatically starts the ASP.NET Core app before E2E tests
+/// and stops it after tests complete. This ensures the web server is running
+/// for Playwright tests both locally and in CI.
 /// </summary>
 public class WebServerFixture : IDisposable
 {
@@ -13,7 +15,7 @@ public class WebServerFixture : IDisposable
 
     public WebServerFixture()
     {
-=        var externalUrl = Environment.GetEnvironmentVariable("BP_E2E_URL");
+        var externalUrl = Environment.GetEnvironmentVariable("BP_E2E_URL");
         if (!string.IsNullOrEmpty(externalUrl))
         {
             Console.WriteLine($"Using external URL: {externalUrl}. Skipping local server startup.");
@@ -22,7 +24,7 @@ public class WebServerFixture : IDisposable
 
         try
         {
-=            var solutionDir = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "../../../../../"));
+            var solutionDir = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "../../../../../"));
             var projectPath = Path.Combine(solutionDir, "BPCalculator/BPCalculator.csproj");
 
             if (!File.Exists(projectPath))
@@ -50,7 +52,7 @@ public class WebServerFixture : IDisposable
                 throw new InvalidOperationException("Failed to start the web server process.");
             }
 
-=            _process.OutputDataReceived += (sender, e) =>
+            _process.OutputDataReceived += (sender, e) =>
             {
                 if (!string.IsNullOrEmpty(e.Data))
                 {
