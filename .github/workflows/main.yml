@@ -51,6 +51,10 @@ jobs:
       - name: Build
         run: dotnet build --configuration Release --no-restore
 
+      - name: Install Playwright Browsers
+        run: pwsh tests/BPCalculator.E2E/bin/Release/net8.0/playwright.ps1 install --with-deps chromium
+        continue-on-error: false
+
       - name: Test and Generate Coverage
         run: dotnet test --verbosity normal /p:CollectCoverage=true /p:CoverletOutput=coverage.opencover.xml /p:CoverletOutputFormat=opencover
 

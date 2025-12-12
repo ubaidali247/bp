@@ -3,13 +3,19 @@ using Xunit;
 
 namespace BPCalculator.E2E;
 
-public class CalculatorUiTests : IAsyncLifetime
+public class CalculatorUiTests : IClassFixture<WebServerFixture>, IAsyncLifetime
 {
     private static readonly string BaseUrl = Environment.GetEnvironmentVariable("BP_E2E_URL") ?? "http://localhost:5000";
+    private readonly WebServerFixture _serverFixture;
 
     private IPlaywright? _playwright;
     private IBrowser? _browser;
     private IPage? _page;
+
+    public CalculatorUiTests(WebServerFixture serverFixture)
+    {
+        _serverFixture = serverFixture;
+    }
 
     public async Task InitializeAsync()
     {
