@@ -2,4 +2,4 @@
 Blood Pressure Calculator
 ASP.Net Core
 # Triggering staging workflow
-lorem ipsum
+lorem ipsum is simply
