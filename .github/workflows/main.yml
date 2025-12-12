@@ -12,7 +12,7 @@ on:
 jobs:
 
   # -------------------------------------------------------
-  # 1. CI JOB → build, test, sonarcloud (runs on every branch)
+  # 1. CI JOB → Build, Test, Playwright, SonarCloud (all branches)
   # -------------------------------------------------------
   ci:
     runs-on: ubuntu-latest
@@ -50,6 +50,14 @@ jobs:
 
       - name: Build
         run: dotnet build --configuration Release --no-restore
+
+      # -------------------------------------------------
+      # ⭐ Install Playwright Browsers (Required for Tests)
+      # -------------------------------------------------
+      - name: Install Playwright
+        run: |
+          dotnet tool install --global Microsoft.Playwright.CLI || true
+          playwright install
 
       - name: Test and Generate Coverage
         run: dotnet test --verbosity normal /p:CollectCoverage=true /p:CoverletOutput=coverage.opencover.xml /p:CoverletOutputFormat=opencover
@@ -90,7 +98,7 @@ jobs:
 
 
   # -------------------------------------------------------
-  # 3. SMOKE TESTS (Only after staging deploy)
+  # 3. SMOKE TESTS AFTER STAGING DEPLOY
   # -------------------------------------------------------
   smoke_test:
     runs-on: windows-latest
