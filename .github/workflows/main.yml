@@ -115,9 +115,9 @@ jobs:
 
 
   # -------------------------------------------------------
-  # 4. DEPLOY TO PRODUCTION → only on master branch
+  # 4. DEPLOY TO GREEN SLOT (Blue-Green Step 1)
   # -------------------------------------------------------
-  deploy_prod:
+  deploy_to_green_slot:
     runs-on: windows-latest
     needs: ci
     if: github.ref == 'refs/heads/master'
@@ -145,9 +145,83 @@ jobs:
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_196F7C91A67E43AC9556CC646674D709 }}
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_70341DED43AB45308F84726349690B1E }}
 
-      - name: Deploy to Azure Production
+      - name: Deploy to Green Slot
         uses: azure/webapps-deploy@v3
         with:
           app-name: "bp-app"
-          slot-name: "Production"
+          slot-name: "bp-app-green"
           package: "published"
+
+
+  # -------------------------------------------------------
+  # 5. TEST GREEN SLOT (Blue-Green Step 2)
+  # -------------------------------------------------------
+  test_green_slot:
+    runs-on: windows-latest
+    needs: deploy_to_green_slot
+    if: github.ref == 'refs/heads/master'
+
+    steps:
+      - name: Wait for deployment to settle
+        shell: pwsh
+        run: Start-Sleep -Seconds 30
+
+      - name: Smoke Test Green Slot
+        shell: pwsh
+        run: |
+          $url = "https://bp-app-green-d0gnanazdzhgdrcs.francecentral-01.azurewebsites.net/"
+          Write-Host "Testing green slot: $url"
+          
+          $response = Invoke-WebRequest -Uri $url -UseBasicParsing -TimeoutSec 30
+          if ($response.StatusCode -eq 200) {
+              Write-Host "✓ Green slot is healthy! HTTP Status: $($response.StatusCode)"
+          } else {
+              Write-Error "❌ Green slot test failed! HTTP Status: $($response.StatusCode)"
+              exit 1
+          }
+
+
+  # -------------------------------------------------------
+  # 6. SWAP TO PRODUCTION (Blue-Green Step 3)
+  # -------------------------------------------------------
+  swap_to_production:
+    runs-on: windows-latest
+    needs: test_green_slot
+    if: github.ref == 'refs/heads/master'
+
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+      - name: Azure Login (OIDC)
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_6599CACD2F1F4439935635D7D9794176 }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_196F7C91A67E43AC9556CC646674D709 }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_70341DED43AB45308F84726349690B1E }}
+
+      - name: Swap Green to Production
+        shell: pwsh
+        run: |
+          Write-Host "Swapping green slot to production..."
+          az webapp deployment slot swap `
+            --name bp-app `
+            --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} `
+            --slot bp-app-green `
+            --target-slot production
+
+      - name: Verify Production
+        shell: pwsh
+        run: |
+          Start-Sleep -Seconds 15
+          $url = "https://bp-app-cnega2e8cfcneud5.francecentral-01.azurewebsites.net/"
+          Write-Host "Verifying production: $url"
+          
+          $response = Invoke-WebRequest -Uri $url -UseBasicParsing
+          if ($response.StatusCode -eq 200) {
+              Write-Host "✓ Production swap successful! HTTP Status: $($response.StatusCode)"
+          } else {
+              Write-Error "❌ Production verification failed!"
+              exit 1
+          }
