@@ -1,4 +1,4 @@
-name: CI-CD Pipeline (Build, Test, SonarCloud, Deploy Staging/Prod)
+name: CI-CD Pipeline (Build, Test, SonarCloud, Blue/Green Deploy)
 
 on:
   push:
@@ -12,7 +12,7 @@ on:
 jobs:
 
   # -------------------------------------------------------
-  # 1. CI JOB → build, test, sonarcloud (runs on every branch)
+  # 1. CI JOB → build, test, SonarCloud (runs on every branch)
   # -------------------------------------------------------
   ci:
     runs-on: ubuntu-latest
@@ -64,48 +64,52 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: dotnet sonarscanner end /d:sonar.login="${SONAR_TOKEN}"
 
-
-  # -------------------------------------------------------
-  # 2. DEPLOY TO STAGING → only on staging branch
-  # -------------------------------------------------------
-  deploy_staging:
-    runs-on: windows-latest
-    needs: ci
-    if: github.ref == 'refs/heads/staging'
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: '9.x'
-
-      - name: Publish App
+      - name: Publish App Artifact
         run: dotnet publish -c Release -o "published"
 
-      - name: Deploy to Azure Staging
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: published-app
+          path: published
+
+  # -------------------------------------------------------
+  # 2. DEPLOY TO STAGING SLOT (Green)
+  # -------------------------------------------------------
+  deploy_staging_slot:
+    runs-on: windows-latest
+    needs: ci
+    if: github.ref == 'refs/heads/staging' || github.ref == 'refs/heads/master'
+
+    steps:
+      - name: Download Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: published-app
+
+      - name: Azure Login
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Deploy to Staging Slot (green)
         uses: azure/webapps-deploy@v3
         with:
-          app-name: "bp-app-staging"
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_9DB31DFF220F4A68B53A16107CE92F7B }}
+          app-name: "bp-app"
+          slot-name: "green"
           package: "published"
 
-
   # -------------------------------------------------------
-  # 3. SMOKE TESTS (Only after staging deploy)
+  # 3. SMOKE TESTS / BDD
   # -------------------------------------------------------
-  smoke_test:
+  smoke_test_slot:
     runs-on: windows-latest
-    needs: deploy_staging
-    if: github.ref == 'refs/heads/staging'
-
+    needs: deploy_staging_slot
     steps:
       - name: Simple HTTP check
         shell: pwsh
         run: |
-          $url = "https://bp-app-staging-hqhsbkf3ezhkhmh8.francecentral-01.azurewebsites.net/"
+          $url = "https://bp-app-green.azurewebsites.net/health"
           $response = Invoke-WebRequest -Uri $url -UseBasicParsing
           if ($response.StatusCode -ne 200) {
               Write-Error "Smoke test failed! HTTP Status: $($response.StatusCode)"
@@ -113,41 +117,51 @@ jobs:
               Write-Host "Smoke test passed! HTTP Status: $($response.StatusCode)"
           }
 
+      - name: Run BDD / Integration Tests
+        run: dotnet test --filter TestCategory=BDD
 
   # -------------------------------------------------------
-  # 4. DEPLOY TO PRODUCTION → only on master branch
+  # 4. SWAP GREEN -> PRODUCTION
   # -------------------------------------------------------
-  deploy_prod:
-    runs-on: windows-latest
-    needs: ci
+  swap_to_production:
+    runs-on: ubuntu-latest
+    needs: smoke_test_slot
     if: github.ref == 'refs/heads/master'
 
-    permissions:
-      id-token: write
-      contents: read
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: '9.x'
-
-      - name: Publish App
-        run: dotnet publish -c Release -o "published"
-
-      - name: Azure Login (OIDC)
+      - name: Azure Login
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_6599CACD2F1F4439935635D7D9794176 }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_196F7C91A67E43AC9556CC646674D709 }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_70341DED43AB45308F84726349690B1E }}
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - name: Deploy to Azure Production
-        uses: azure/webapps-deploy@v3
+      - name: Swap Green -> Production
+        run: |
+          az webapp deployment slot swap \
+            --resource-group YOUR_RESOURCE_GROUP \
+            --name bp-app \
+            --slot green \
+            --target-slot production
+
+  # -------------------------------------------------------
+  # 5. POST-SWAP VALIDATION + ROLLBACK
+  # -------------------------------------------------------
+  post_swap_validation:
+    runs-on: ubuntu-latest
+    needs: swap_to_production
+
+    steps:
+      - name: Azure Login
+        uses: azure/login@v2
         with:
-          app-name: "bp-app"
-          slot-name: "Production"
-          package: "published"
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Validate Production Health
+        run: |
+          $url = "https://bp-app.azurewebsites.net/health"
+          $status = curl -s -o /dev/null -w "%{http_code}" $url
+          echo "Production status: $status"
+          if [ "$status" -ne 200 ]; then
+            echo "Production validation failed. Rolling back..."
+            az webapp deployment slot swap --resource-group YOUR_RESOURCE_GROUP --name bp-app --slot green --target-slot production
+            exit 1
+          fi
